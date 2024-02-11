@@ -85,17 +85,68 @@ also found at this page:
 
 
 ### Just out of curiosity, comparing assembly files of same source but different target specification
-TODO
+
+![image](https://github.com/tbang618/CC24/assets/78170299/3ac91c04-4de6-4d1b-8df7-7a3501c47333)
+Here's a basic hello world C program, find it at Examples/hello.c, within the comments you will also
+see how I compiled this file to browser api and wasi api (and also how to run it). Staring at the 
+raw .wasm files isn't particularly useful, so we need to disassemble to the WebAssembly Text (known
+as WAST or WAT) which is readable web assembly. There are different tools to do this, it seems
+emcc doesn't have this (or I am unaware it does), luckily Wavm (a WASI vm to be covered shortly)
+does have a disassemble option. 
+Ok it turns out the WAST are quite large probably because since the printf is a form of i/o, 
+it will invoke the relevant api, but i did save the output in the examples folder.
+
+Take note at the top of file at the export function _start exists in the wasi one but not in the
+browser one, we will see how this impacts running the .wasm files on different embedded 
+environments.
 
 ## 2. Run the web assembly code on a web assembly stack-based virtual machine
 
 ### For Browser api, well, just run it on your browser or node.js server
+
+![image](https://github.com/tbang618/CC24/assets/78170299/20ee0c52-048e-4700-b911-d4d28065d0a6)
+Take a look at the .js file to see how the JS 'glue' code interacts with the wasm module
+As for running the HTML file:
+"Unfortunately several browsers (including Chrome, Safari, 
+ and Internet Explorer) do not support file:// XHR requests, 
+ and can’t load extra files needed by the HTML (like a .wasm 
+ file, or packaged file data as mentioned lower down). For 
+ these browsers you’ll need to serve the files using a local 
+ webserver and then open http://localhost:8000/hello.html)."
+
 
 ### For WASI api, run it on a WASI compliant runtime such as 
 - Wasmtime
 - WAVM
 - wasmer
 - ...
+  
+![image](https://github.com/tbang618/CC24/assets/78170299/4e236945-a3b7-49a6-b0e5-1bf0f40b77e4)
+
+Now lets look at what happens if you run .wasm files in the wrong execution environment
+
+![image](https://github.com/tbang618/CC24/assets/78170299/3b278ce9-6b1b-4d6a-9a17-9e69bedda07e)
+
+It looks WAVM as part of the WASI api, expects a _start function, which we noted earlier is not in the browser
+one but is present in the wasi one.
+
+Trying it the other way, edit the hellow_browser.js file so that it points to 'hello_wasi.wasm' 
+
+![image](https://github.com/tbang618/CC24/assets/78170299/ddcc3328-10a2-4d5f-aecb-53a9e8df3e33)
+
+![image](https://github.com/tbang618/CC24/assets/78170299/9863af3e-e240-4111-a413-0dde905a307d)
+
+Again, functions that were expected by the browser api were missing.
+
+## Final comments
+Further down the project, after we have setup a small kernel and embedded a wasm wasi runtime on it,
+we will look to explore how to get wasm vms on disaggregated hardware to communicate with eachother
+and share work (the coalescing part). This will require deep knowledge of:
+- WebAssembly Core Specification
+- WASI api
+- Virtual Machines
+- Distributed Networking
+- the VM we decide to work with (whether it be wasmtime or wavm)
 
 
 
