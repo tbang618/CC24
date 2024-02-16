@@ -1,7 +1,5 @@
 # Building GCC Cross-Compiler on Debian
-This is the tutorial specifically for building the tool-chain on a Debian machine.
-
-1. Build the cross-compiler
+This is the tutorial specifically for building the GCC cross-compiler on Debian Linux system.
 
 ## Preparations
 A **cross-compiler** is a compiler on a host machine that builds binaries for a different machine.  Since I'm on Debian, GCC and Binutils should already be installed.  We are going to use these pre-installed versions to ==build new versions for another target platform==.
