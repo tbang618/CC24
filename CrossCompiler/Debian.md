@@ -1,4 +1,4 @@
-# BareBones OS
+# Building GCC Cross-Compiler on Debian
 This is the tutorial specifically for building the tool-chain on a Debian machine.
 
 1. Build the cross-compiler
