@@ -6,6 +6,7 @@
 # first, make sure you created $HOME/opt/cross/
 # and that source files for GCC are at $HOME/src/gcc-13.2.0/
 # and that source files for Binutils are ate $HOME/src/binutils-2.42/
+# optionally, include source files for GDB in $HOME/src/gdb.x.y.z for whatever version x.y.z.
 #
 
 ### Set-Up Environment for Build ###
