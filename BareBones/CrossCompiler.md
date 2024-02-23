@@ -45,7 +45,7 @@ GDB (the GNU debugger) is part of Binutils, but you can build it separately too.
 ## Building
 It is recommended to build the cross-compiler in `$HOME/opt/cross` for just your use or globally in `/usr/local/cross`.  I'll go with the first.  
 To build, follow the below instructions, remembering to replace `x.y.z` with the actual version numbers.  
-I included the bash script `barebones.sh` to make things easier.
+I included the bash script `buildgcc.sh` to make things easier.
 
 ``` bash
 ### Set-Up Environment for Build ###
@@ -85,10 +85,10 @@ make install-target-libgcc
 Note, it took about 10 minutes for Binutils to compile and about 40 minutes for GCC to compile on my machine.
 
 ## Verify GCC
-Test the new cross-compiler works:
+Test taht the new cross-compiler works with:
 ``` bash
 $ $HOME/opt/bin/i686-elf-gcc --version
 ```
-
+Note the other tools in the same directory.
 
 
