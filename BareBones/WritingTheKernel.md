@@ -48,7 +48,7 @@ The tutorial provides a very simple kernel to explore: it just provides a termin
 
 I included a version with comments as `kernel.c`; to compile to an object file:
 ``` Shell
-$HOME/opt/cross/bin/i6860-elf-gcc kernel.c -o kernel.o -std=gnu99 -ffreestanding -O2 -Wall -Wextra
+$HOME/opt/cross/bin/i6860-elf-gcc -c kernel.c -o kernel.o -std=gnu99 -ffreestanding -O2 -Wall -Wextra
 ```
 
 Quick review of the flags:
