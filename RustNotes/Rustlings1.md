@@ -20,9 +20,9 @@ println!("Hello {}", "World!");
 
 We'll learn more about macros later on.
 ## Variables
-### Variables 1: Declaring Variables
+### 1. Declaring Variables
 Variables are declared with the `let` keyword.
-### Variables 2: Variable Types
+### 2. Variable Types
 The compiler can usually infer the type of a declared variable, but we can explicitly say which type.  This is called **type annotation**.  For example, in this exercise:
 ``` Rust
 let x: i32 = 10;
@@ -39,17 +39,17 @@ The list of numeric types are:
 | `u64`    | `i64`  |
 | `u128`   | `i128` |
 
-### Variables 3: Binding Values
+### 3. Binding Values
 Variables need to be bound to a value before they can used, as in most programming languages.
-### Variables 4: Mutable Variables
+### 4. Mutable Variables
 In Rust, variables are immutable by default.  To make a variable mutable, we use the `mut` keyword.  
-### Variables 5: Shadowing
+### 5. Shadowing
 **Shadowing** allows the reuse of a variable name.  This is useful for:
 - changing a variable's type
 - reusing the same variable name
 
 To shadow, re-declare the variable with `let`.
-### Variable 6: Constants
+### 6. Constants
 Constants in Rust are declared with the `const` keyword.
 ## Functions
 ### 1. Declaring Functions

@@ -55,7 +55,7 @@ if (x = 23) {
 } // will output "x is now: 23"
 ```
 
-This is not the case in Rust.  However, we can think of `if let` as a special case of an if-statement where destructuring an option (`let Some(x) = optional_value`) expresses `True` if the destructuring was successful and `False` if not (in which case original_value is `None`). 
+This is not the case in Rust.  However, we can think of `if let` as a special case of an if-statement where destructuring an option (`let Some(x) = optional_value`) expresses `True` if the destructuring was successful and `False` if not (in which case `optional_value` is `None`). 
 
 We have the equivalent `while let` for checking the optional value of a variable in a while-loop, the other major control-flow statement.
 ```Rust
@@ -64,7 +64,7 @@ while let Some(inner_value) = optional_value {
 }
 ```
 
-The loop ends `None` is "returned".
+The loop ends when the destructuring to `None` occurs.
 
 When you `.pop()` a value from a vector, the value is wrapped in `Some`.  So you may need to `.unwrap()` the returned value from `.pop()`; in a `while let` you may also nest `Some`:
 ```Rust
@@ -87,7 +87,7 @@ struct Point {
 
 let p = Point { x: 100, y: 200 };
 ```
-The variable `p` is the *parent variable* and we can call `x` and `y` *child variables*.
+The variable `p` is the **parent variable** and we can call `x` and `y` **child variables**.
 
 As a review: between two simple variables, reassigning a value moves the *ownership* from one variable to another.  This occurs also when passing a variable to a function, as we saw before.
 
@@ -103,7 +103,7 @@ Warning: unfortunately in this exercise, we have a parent variable named `y` and
 In this exercise, a partial move occurs from `Point y` to `Point p` during the *destructuring* in the match arm `Some(p) => ...` of match-case.  The parent variable `y` holds a compound data type (`Point`), so it cannot be moved "as a whole" to `p`.  Instead, what is happening is that the child variables `y.x` and `y.y` are being moved to ownership by `p.x` and `p.y`.
 
 We want to use `Point y` later, so we want to let `p` borrow the values from `y` in the match-arm.  There are two problems:
-1. Match-cases are by default move ownership (also described as *consuming*).
+1. Match-cases by default move ownership (also described as *consuming*).
 2. The match case is *destructuring*, which is an instance of *pattern matching*.
 
 We can't use `&p` in the match-arm because that means we expect to pattern a match against a *reference* to a `Point` object; instead we just want to match to a `Point` object but not move its ownership.  A subtle point and confusing, I know!
@@ -146,7 +146,7 @@ This checking is so common that Rust provides a shortcut with the `?` operator:
     return Ok(qty * cost_per_item + processing_fee);
 ```
 
-Placing `?` after a method/function that returns either `Ok` or `Err` does two things:
+Placing `?` after a method/function that returns a `Result` does two things:
 - If the method returns `Err(<some_error>)`, this error is immediately returned by the function `total_cost()`.
 - If the method returns `Ok(<some_value>)`, then the operator returns `Ok(<some_value>).unwrap()` i.e. just the inner value `<some_value>`.
 

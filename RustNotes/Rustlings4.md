@@ -1,9 +1,9 @@
 # Advanced Topics
 You can get pretty far with just the previous three sections.  However, this section includes important topics in creating more complex Rust programs.
 ## Lifetimes
-The time from a variables initialization to its invalidation, whether its value is moved or it goes out of scope, is called its **lifetime**.  It may be thought of as the "lifetime of a scope".  This is what the compiler checks to make sure borrows/references are legal.   Sometimes we need to explicitly indicates lifetimes for the compiler, though it can infer a lot by itself.
+The time from a variable's initialization to its invalidation, whether its value is moved or it goes out of scope, is called its **lifetime**.  It may be thought of as the "lifetime of a scope".  This is what the compiler checks to make sure borrows/references are legal.   Sometimes we need to explicitly indicate lifetimes for the compiler, though it can infer a lot by itself.
 
-These exercises don't go into much depth of lifetimes, giving only an introductory understanding.
+These exercises don't go into much detail of lifetimes, giving only an introductory understanding.
 ### 1. Declaring Lifetimes
 If a function returns a reference, it needs to know in what lifetime (scope) the reference is valid. 
 
@@ -38,7 +38,7 @@ struct Book<'a> {
 Again, we are saying that `author` and `title` should not life longer than the variables from which they are borrowing.
 
 ## Tests
-Tests are used in program verification.  Test are special functions in Rust, marked by the directive `#[test]` that are compiled into a separate binary called the **test runner**.  Cargo, on creating a new project, by default, creates a separate module called `test` and places there some template test functions.  The module is annotated by the directive `#[cfg(test)]`, which tells the compiler to only run the module in *test mode* i.e. `cargo test`.
+Tests are used in program verification.  Test are special functions in Rust, marked by the directive `#[test]` that are compiled into a separate binary called the **test runner**.  By default, when Cargo creates a new project it also creates a separate module called `test` and places there some template test functions.  The module is annotated by the directive `#[cfg(test)]`, which tells the compiler to only run the module when in *test mode* i.e. `cargo test`.
 ### 1. Test Macro: Assert
 Rust provides some macros to use within test functions.  In this exercise we explore `assert!(<condition>)`, which only passes the test if the `<condition>` evaluates to `true`.
 ### 2. Test Macro: Assert Equal
@@ -51,7 +51,7 @@ We can add additional meta-information about a testing function with additional 
 ## Iterators
 In Rust, an **iterator** is a *trait*: a common interface (a set of methods and structs) for Rust's container types (also called **iterables**) that allow processing their elements (called **items**) sequentially.  
 
-Perhaps confusingly, an iterator itself is not actually a data type (as in other languages), but an interface that encapsulates how different iterables (such as a vector) would implement itself as an iterator.  However, we treat an iterator like an object, such that it has methods on itself.  The type annotation of an iterator is:
+Perhaps confusingly, an iterator itself is not actually a data type (as in some other languages), but an interface that encapsulates how different iterables (such as a vector) would implement itself as an iterator.  However, we treat an iterator like an object, such that it has methods on itself.  The type annotation of an iterator is:
 ```Rust
 let mut v : std::slice::Iter<i32> = vec![-1, 0, 1, 2, 3, 4].iter();
 ```
@@ -73,7 +73,7 @@ This exercise goes over using iterators.
 
 In the first step, we are defining a function that capitalizes the first letter of a *string slice* (`&str`).  Note that string slices have their own method of creating an iterator from their characters: `.chars()`.  This acts similar to `.iter()`, in that the original iterable is not mutated.  To collect the iterator back into a string slice, we use the method `.as_str()`.  Remember that the method `.to_uppercase()` works on a string slice and returns a string slice.
 
-In the second step, the function parameter will be of a `slice` type to `&str` elements.  The `.iter()` method works to create an iterator.  In this step, we introduce *for-loops over iterators*.  While we can make a regular for-loop that tests if the next item is `None`, Rust provides a syntax to iterate over an iterator:
+In the second step, the function parameter will be of a `slice` type of `&str` elements.  The `.iter()` method works to create an iterator.  In this step, we introduce *for-loops over iterators*.  While we can make a regular for-loop that tests if the next item is `None`, Rust provides a syntax to iterate over an iterator:
 ```Rust
 for item in iterable.iter() {
 	println!("{item}");
@@ -90,7 +90,7 @@ This exercise makes use of the `.map()` method on iterator types.  We've seen `.
 some_iterator.map(|item| <expression with item>);
 ```
 
-The syntax `|item| <expression with item>` is known as a **closure**, also referred to as an *anonymous function*.  The body `<expression with item>` can be an expression (simple as `item + 1`) or another function call (such as `divide(item)`).  We'll learn closures more in detail later.
+The syntax `|item| <expression with item>` is known as a **closure**, also referred to as an **anonymous function**.  The body `<expression with item>` can be an expression (simple as `item + 1`) or another function call (such as `divide(item)`).  We'll learn closures more in detail later.
 
 If `some_iterator` is a mutable iterator (created with `.into_iter()` or `iter_mut()`), then the same iterator is returned and the closure must return the same type as the original item.  For non-mutable iterators, we can `.map()` items into a new type.
 
@@ -98,9 +98,10 @@ If `some_iterator` is a mutable iterator (created with `.into_iter()` or `iter_m
 To turn an iterator back into a container type, we use the `.collect()` method.  Generally, the compiler can infer what container type should be returned.  Generally, it looks at either the original container type of the iterator, the type annotation of a binding variable, or the type of the items.
 
 The `.collect()` method can return a non-container type as well.  Two common situations:
-- an iterator of `char` items collects into a `String`
-- an iterator of `Result<T, E>` will return `Result<Collection<T>, E>`
-The second instance occurs in part two of this exercise.
+- an iterator of `char` items collects into a `String`.
+- an iterator of `Result<T, E>` items will return `Result<Collection<T>, E>`.
+
+The second instance occurs in part-two of this exercise.
 
 We can explicitly state the container type by a special syntax called **turbo fish**: `::<T>`.   For example, to explicitly collect an iterator into a vector (ignoring any compiler inferences):
 ```Rust
@@ -150,7 +151,7 @@ let sum = (2 .. 15).fold(0, |acc, item| acc + item);
 As an aside, technically a range is a distinct data type (`std::ops::Range`) that happens to implement the iterator trait (`std::slice::Iter`), so that it may be used as an iterator.  If it quacks like a duck and waddles like a duck...
 
 ### 5. Iterators of Hash Maps
-The iterator of a **hash map** produces the entries of the hash map as a tuple consisting of the key and value.  For example:
+For an iterator of a **hash map**, the items are tuples consisting of each Hash Map's entry i.e. a ke and value pair.  For example:
 ```Rust
 // some_hash_map = {"one": 1, "two": 2, "three": 3}
 let hm_iter = some_hash_map.iter();
@@ -161,8 +162,8 @@ Alternatively, Rust's hash map implements two trait methods:
 - `.values()` returns an iterator of just the hash map values.
 - `.keys()` returns an iterator of just the hash map keys.
 
-This exercise wants you to recreate two existings functions using iterator methods rather than simply iterating over the values.  Some useful ones:
-- `.fold(<initial value>, <closure>)` which we saw last exercise.
+This exercise wants you to recreate two existings functions using iterator methods rather than simply iterating over the values.  Some useful functions to use:
+- `.fold(<initial value>, <closure>)`, which we saw last exercise.
 - `.filter(<closure>)` returns a new iterator consisting  of only items that returned `true` when passed to the argument closure.
 	- As an example: `some_iterator.filter(|x| *x == &some_value)`
 	- Note that the closure takes the *reference* of each each item, hence we must dereference with `*` if we want to compare the item value to some other value.
@@ -172,7 +173,7 @@ See the Rust documentation for more methods.  There are a lot, including more fa
 ## Smart Pointers
 A general **pointer** is a variable that holds an address to memory; these are the *references* we encountered in previous exercises.  A **smart pointer** is essentially a pointer with additional automatic memory management abilities.  
 
-In Rust, smart pointers refer to data structures that can own (in context of Rust's owernship) and manipulate memory; in fact, `Vec<T>` and `String` types are considered types of smart pointers.  There is no *primitive* smart pointer; Rust's library provides some smart pointers designed for specific purposes, or you can write one yourself (thought that's not covered in this course).
+In Rust, smart pointers refer to data structures that can own (in context of Rust's owernship) and manipulate memory; in fact, `Vec<T>` and `String` types are considered types of smart pointers.  There is no *primitive* smart pointer; Rust's standard library provides some smart pointers designed for specific purposes, or you can write one yourself (though that's not covered in this course).
 
 In short: a smart pointer is a wrapper around a value on the heap.
 
@@ -188,7 +189,7 @@ let a = Box::new(13);
 A box is useful when you are defining a function or user-defined structure that requires a type of variable size.  
 
 ### 2. Reference Counting
-Previously I said that there can only be one owner of a value in Rust.  However, there are cases when we really do need more than one owner; the common case being graph data structures.  Rust provides for this with the **reference counting** smart pointer type `Rc<T>`.
+Previously I said that there can only be one owner of a value in Rust.  However, there are cases when we really do need more than one owner; a common case is in creating graph data structures.  Rust provides for this with the **reference counting** smart pointer type `Rc<T>`.
 
 Basically, an `rc<T>` smart pointer holds a value of type `T` on the heap, and this value can have *multiple* owners.  The value won't be freed until every owner is invalid i.e. no more references are made to this value.
 
@@ -222,4 +223,6 @@ The **Clone-On-Write** smart pointer `Cow` automatically handles whether a value
 - It clones its value if mutation (or some other ownership manipulation) occurs.
 
 ## Threads
-...
+Threading is provided by Rust through its standard library via `std::thread`.  The standard library that deals with time -`std::time`- is also useful here.
+
+Thread

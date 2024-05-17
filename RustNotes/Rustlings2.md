@@ -8,7 +8,7 @@ Rust has a few **primitive types**; these are *built-in* to Rust.  Later we'll l
 
 We'll see some values have functions that operate on themselves; these are **methods**, similar to those in Java or C++.
 ### 1. Booleans
-Formally introducing **booleans** (`bools`):
+Formally introducing **booleans** (`bool`):
 - `true`
 - `false`
 
@@ -42,9 +42,11 @@ x[0] = 100;
 ### 4. Slices
 Here we first come across Rust's unique concepts of **ownership** and **borrowing**.  We'll cover them in greater detail later on.
 
-A **slice type** refers to a contiguous sequence of objects, all of the same type.  The slice type consists of a pointer to the first object and the size of the object's type.
+A **slice type** refers to a contiguous sequence of objects, all of the same type.  The slice type consists of a pointer to the first object and the size of the object's type.  The difference from an array is that the size of a slice type is determined *at runtime* and are typically *unowned*, meaning they are references to parts of compound types.
 
-In this exercise, a slice is used to refer to a sub-range of an array.  For example:
+The *type annotation* for a slice is `&[T]`.  You can think of it as an "un-owned array", for now.
+
+In this exercise, a slice is used to refer to a sub-array of an array.  For example:
 ```Rust
 let a = [1, 2, 3, 4, 5];
 
@@ -56,9 +58,6 @@ let nice_slice = &a[1 .. 4];
 The `&` symbol is Rust's **reference operator**, which gets or "borrows" the value of a variable.  This is the same as C's reference operator (`&`), which gets the memory address of a variable.
 
 Here `&a[1 .. 5]` means "go to the location" of `a` and get the "first up-to fifth" objects of the sequence to which `a` "points": so this slice contains four objects.
-
-The *type annotation* for a slice is `&[T]`.  You can think of it as an "un-owned array", which will make sense later.
-
 ### 5. Tuples
 A **tuple** is a Rust's other primitive **compound type** that consists of elements that may be of *different* types.  Like arrays, tuples are of fixed size.
 
@@ -77,9 +76,12 @@ let (name, age) = my_tuple;
 ```
 
 ### 6. Indexing
-Elements in an array or tuple may also be accessed by *indexing*.  Indexing for a tuple is different from that of indexing for an array.
+Elements in an array or tuple may also be accessed by indexing.  Indexing for a tuple is different from that of indexing for an array.
 
-For an array: `someArray[<index>]`.  For a tuple: `someTuple.<index>`.  For example:
+- For an array: `someArray[<index>]`.  
+- For a tuple: `someTuple.<index>`.  
+
+For example:
 ```Rust
 let numbers = (1, 2, 3);
 let second = numbers.1; // second = 2
@@ -100,7 +102,7 @@ let v = vec![10, 20, 30, 40];
 ```
 
 ### 2. Iterating over Vectors
-Here we use something called **iterators** that let's us operate on all the elements of a vector; either one-by-one or all-at-once.  Iterators are covered in depth much later.
+Here we use something called **iterators** that let's us operate on all the elements of a vector; either one-by-one or all-at-once.  Iterators are covered in depth much later (part 4).
 #### Mutable Iterator 
 The method `.iter_mut()` returns an *iterator* that "produces" *references* to each vector element, one-by-one.   In the for-loop of the exercise, `element` is a *reference* to a vector element and each iteration of the loop refers to the *next* element in the vector.  
 
@@ -130,24 +132,24 @@ There is only one owner of a value at a time.  Ownership of a value may be *move
 ```Rust
 let a = 10;
 let b = a;
-// b now owns `10` and a is an invalid variable (holds nothing)
+// `b` now owns `10` and `a` is an invalid variable (holds nothing)
 ```
 
 ### 1. Moving Variables
 Here is a first-pass understanding of what is happening in this exercise:
 1. The vector in variable `vec0` is *moved* to argument `vec` in the scope of `fill_vec()`.   
 	- Now `vec0` is invalid.  Try adding `println!("{}", vec0[0])` at the end of `main()` to see an error message.
-2. The vector is *moved* from the argument `vec` to newly declared variable `vec`.
+2. The vector is *moved* from the argument `vec` to newly declared variable `vec` in the body.
 	- The argument `vec` is not invalid.
-	- Since we want to change the vector, the new `vec` needs to be declared as *mutable* with `mut`.
+	- Since we want to change the vector, the new `vec` in the body needs to be declared as *mutable* with `mut`.
 3. The vector is mutated: a new value is pushed onto the vector.
 4. `vec` is *returned* from the function (i.e. placed to the outside scope) and *moved* to `vec1`.  
 	- At this point, only `vec1` is a valid variable.
 
 ### 2. Borrowing
-In this exercise, we want to keep `vec0` in the scope of `main()` instead of moving it into `fill_vec()`.
+In this exercise, we want to keep `vec0` valid in the scope of `main()` after "moving" its value into `fill_vec()`.
 
-Similar to *pass-by-reference* in C/C++, a different variable or scope can **borrow** a value.  The *owner* essentially allows another variable --the *borrower*-- to access its owned value, but the borrower *cannot free* the value; when the borrower goes out of scope, the value remains valid with the owner.  A borrowed value, or **reference**, is prefixed by the symbol `&`.   
+Similar to *pass-by-reference* in C/C++, a different variable or scope can **borrow** a value.  The *owner* essentially allows another variable, the *borrower*, to access its owned value, but the borrower *cannot free* the value; when the borrower goes out of scope, the value remains valid with the owner.  A borrowed value, or **reference**, is prefixed by the symbol `&`.   We already saw this when introducing slice types.
 
 As for the exercise: first, the function definition of `fill_vec()` needs to be modified to accept a borrowed vector instead:
 ```Rust
@@ -166,8 +168,8 @@ let vec = vec.clone();
 
 In summary:
 1. The *reference* to `vec0` is moved into `fill_vec()` as `vec`, which is now essentially a vector *pointer*, borrowing `vec0`'s value.
-2. The method `.clone()` is used to copy the vector pointed-to by `vec` into the newly declared vector variable `vec`.
-	- `let vec` is declaring a new owner.
+2. The method `.clone()` is used to copy the vector pointed-to by the argument `vec` into the newly declared vector variable `vec` in the body.
+	- We can think of `let vec` as declaring a new owner.
 3. `vec` is moved out from the scope of `fill_vec()`.
 4. The ownership of `vec`'s value is moved to `vec1`.
 	- At this point, only `vec0` and `vec1` are valid variables: two different owners.
@@ -326,7 +328,7 @@ change_color( (r, g, b) ),
 ### 1. Converting between Types
 A simple string slice, or string literal, is given in double quotations: `"blue"`.
 
-There are a few ways to convert a string slices `&str` to a `String` object.  For a string literal `"blue"`:
+There are a few ways to convert a string slice `&str` to a `String` object.  For a string literal `"blue"`:
 - `"blue".to_string()` 
 - `String::From("blue")`
 - `"blue".to_owned()`
@@ -345,12 +347,12 @@ You can *chain* methods, like in Java or Javascript.
 
 There are many methods to manipulate strings and string slices.  Here are a few for this exercise that works on string slices:
 
-- `.trim()` returns a string slice with leading and  trailing white-spaces removed.
-- `.push_str(<str>)`: appends a string slice to a string object.
+- `.trim()`: returns a string slice with leading and  trailing white-spaces removed.
+- `.push_str(<str>)`: appends a string slice to a string object (returns nothing).
 - `.replace(<pattern>, <replacement>)`: in a given string slice, take a (sub-)string slice to match and replace any instance with the replacement (sub-)string slice.  It returns a `String`.
 - `.repeat(<n : u32>)` returns a string of the string slice repeated `n` times.
 
-To concatenate strings, there are several options.  Using `push_str()` may be tedious, because it is not an expression (returns nothing, so can't be chained), but mutates the string it operates on in place, so that you would need to explicitly return the new string.  Much more easily:
+To concatenate strings, there are several options.  Using `push_str()` may be tedious, because it is not an expression (returns nothing, so can't be chained), but mutates the string it operates on in place, so that you would need to explicitly return the new string.  The shorthand expression:
 ``` Rust
 <String> + <string slice>
 ```
