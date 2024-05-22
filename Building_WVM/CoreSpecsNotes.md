@@ -1,6 +1,8 @@
 # Core Spec Notes
 https://www.w3.org/TR/wasm-core/
 
+## 1.2.1 Concepts
+
 ### Values
 'Numbers' are another way of saying floating point. To see details about floating point numbers see https://ieeexplore.ieee.org/document/4610935.
 
@@ -11,7 +13,7 @@ https://www.w3.org/TR/wasm-core/
 - memory address
 
 #### 64-bit values
-- float, 
+- float 
 - integer
 
 #### 128-bit values
@@ -91,6 +93,40 @@ the environment defines:
 - how exports can be accessed
 
 'However, the details of any particular embedding are beyond the scope of this specification, and will instead be provided by complementary, environment-specific API definitions.' (such as the WASI spec)
+
+## 1.2.2 Sematic Phase
+
+### Decoding
+- 'WebAssembly modules are distributed in a binary format'
+- 'Decoding processes that format and converts it into an internal representation of a module'
+- 'In this specification, this representation is modelled by abstract syntax, but a real implementation could compile directly to machine code instead.'
+-  The grammar notation of the abstract syntax is shown in part 2.
+
+### Validation
+- 'Validation checks a number of well-formedness conditions to guarantee that the module is meaningful and safe'
+- type checking of functions
+- and their instruction sequence (i.e operand stack should be used consistently)
+
+### Execution
+#### Instantiation
+- 'A module instance is the dynamic representation of a module, complete with its own state and execution stack'
+- 'Instantiation executes the module body itself, given definitions for all its imports'
+- globals, memories and tables initialized
+- start function invoked if defined
+- 'returns the instances of the module's exports', referring to the modules exported definitions (not to be confused with the actual module instance itself)
+- remember, a definition isn't just a definition of a function, it can be a definition of a function, table, linear memory or mutable/immutable variables
+
+
+#### Invocation
+- we can invoke an exported function on a module instance 
+- supply required arguments and return respective results
+
+- assuming the call stack is global, what does the per module instance 'execution stack' refer to?
+- or I think it is the case that each module has its own separate execution stack (call stack)
+- '...on a module instance' I think that means that the execution stack of module that contains the invoked method is used rather then of the invoker module stack
+
+- 'Instantiation and invocation are operations within the embedding environment'
+
 
 
 
