@@ -140,9 +140,9 @@ the environment defines:
 - either *sym2* :== A | A | C or *sym2* :== B | B | C but not something like *sym2* :== A | B | C
 
 
-- "When given a sequence x^n^, then the occurrences of x in a sequence written (A~1~ x A~2~)^n^ are assumed to be in point-wise correspondence with x^n^ (similarly for x^*^, x^+^, x^?^).
-- if for example, x^2^ becomes (x~0~ x~1~)
-- then I think, for example, (A~1~ x A~2~)^2^ expands to two iterations that look like (A~1~ x~0~ A~2~) (A~1~ x~1~ A~2~)
+- "When given a sequence x<sup>n</sup>, then the occurrences of x in a sequence written (A<sub>1</sub> x A<sub>2</sub>)<sup>n</sup> are assumed to be in point-wise correspondence with x<sup>n</sup> (similarly for x<sup>*</sup>, x<sup>+</sup>, x<sup>?</sup>).
+- if for example, x<sup>2</sup> becomes (x<sub>0</sub> x<sub>1</sub>)
+- then I think, for example, (A<sub>1</sub> x A<sub>2</sub>)<sup>2</sup> expands to two iterations that look like (A<sub>1</sub> x<sub>0</sub> A<sub>2</sub>) (A<sub>1</sub> x<sub>1</sub> A<sub>2</sub>)
 - that this is what is mean by 'point-wise correspondence'
 - 'This implicitly expresses a form of mapping syntactic constructions over a sequence.'
 
