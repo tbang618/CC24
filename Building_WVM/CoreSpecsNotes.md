@@ -127,6 +127,26 @@ the environment defines:
 
 - 'Instantiation and invocation are operations within the embedding environment'
 
+## 2 Structure
+- chapter 2 is probably the most bulky and important part
+- I will write notes on specific areas where I think it to be beneficial
+- its better to just read it in its entirety but not worry about forgetting things
+- and instead refer back when actually implementing a WVM
+
+- "If the same meta variable or non-terminal symbol appears multiple times in a production, then all those occurrences must have the same instantiation. (This is a shorthand for a side condition requiring multiple different variables to be equal.)"
+- I believe this means if we had *sym1* := A | B
+- and *sym2* :== *sym1* | *sym1* | C
+- then depending on wheter *sym1* is instantiated as A or B we get
+- either *sym2* :== A | A | C or *sym2* :== B | B | C but not something like *sym2* :== A | B | C
+
+
+- "When given a sequence x^n^, then the occurrences of x in a sequence written (A~1~ x A~2~)^n^ are assumed to be in point-wise correspondence with x^n^ (similarly for x^*^, x^+^, x^?^).
+- if for example, x^2^ becomes (x~0~ x~1~)
+- then I think, for example, (A~1~ x A~2~)^2^ expands to two iterations that look like (A~1~ x~0~ A~2~) (A~1~ x~1~ A~2~)
+- that this is what is mean by 'point-wise correspondence'
+- 'This implicitly expresses a form of mapping syntactic constructions over a sequence.'
+
+
 
 
 
